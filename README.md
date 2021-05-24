@@ -718,6 +718,17 @@ The `with` function modifies data that already exists, so that is why we put the
 
 `col = as.integer(cars$cyl)))` This is setting the color equal to the integer we designated it to earlier.
 
+# Citations
+
+I used the DataDaft Youtube page for some tutorials, and I utilized the
+
+https://www.r-graph-gallery.com/
+
+website for many of my ggplot instructions.
+
+I utilized datasets within R, and I used datasets from Opportunity Insights
+
+https://opportunityinsights.org/data/
 
 
 
