@@ -11,7 +11,11 @@ over the internet. Here is a website with .csv .zip files to check out:
 https://support.spatialkey.com/spatialkey-sample-csv-data/
 
 For the examples I use here, I am going to use this dataset I made using data from
-Opportunity Insights, a research institute that uses data to identify barriers throughout America.
+Opportunity Insights, a research institute that uses data to identify barriers throughout America. They have thousands of free datasets to use here:
+
+https://opportunityinsights.org/data/
+
+
 They have many great datasets, and I am using one involving college tiers, parent and child income,
 and quintile info. Here is a direct link to download the Excel file through Dropbox:
 
@@ -37,7 +41,7 @@ ARGUMENT MEANINGS
 
 `collegedata` = the name of the variable we have assigned to the dataset
 
-downloads = this is where we have saved the file to on our computer, if we saved it to the desktop,
+`downloads` = this is where we have saved the file to on our computer, if we saved it to the desktop,
 this would say desktop instead. 
 
 `view()` = this allows you to see the dataset in r
@@ -214,8 +218,48 @@ p + geom_dotplot(binaxis = 'y',
 
 ## Violin Plots
 Violin plots are very similar to boxplots, but they show the density of data at different
-values. For this example, we can 
+values. For this example, we can use the preloaded diamonds dataset
 
+```r
+# violin plots example
+# load libraries and data
+library(tidyverse)
+library(plotly)
+library(IRdisplay)
+
+data = diamonds
+
+# load colors
+colors <- c("green", "red", "blue", "purple",
+            "cyan1", "chartreuse", "wheat")
+```
+Now, we can make the violin plot:
+
+```r
+data %>% ggplot(aes(x = "", y = carat)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  theme(axis.title.x = element_blank())
+ 
+```
+`geom_boxplot()` this adds a boxplot over the violin plot, which makes it easier to visualize quintiles, etc.
+
+We leave the x argument empty because we are only measuring one variable, which is the carat.
+We can measure multiple violin plots against each other as well.
+
+```r
+
+# side by side violin plot
+data %>% ggplot(aes(x = color, y = carat, fill = color)) +
+  geom_violin(draw_quantiles = TRUE) +
+  geom_boxplot(width = 0.05) +
+  theme(axis.title.x = element_blank()) +
+  scale_fill_manual(values = colors)
+```
+
+Here, we set `fill` and `x` equal to each other so that the fill of the violin plot maatches the color data. 
+
+`scale_fill_manual(values = colors)` here, we are using the color variable we made earlier. 
 
 
 # Scatterplot
@@ -369,6 +413,25 @@ This makes the height of the graphs determined by parental income.
 `geom_bar` makes the heighhts of the graphs representative of the counts in the data.
 
 `labs` assigns labels to the axes
+
+## Creating a Barplot in Base R
+
+In base R, we can create items without using outside packages, such as GGPlot2. Here, we are going to create a barplot with the cohort dataset.
+
+```r
+# insert dataset and assign it a name
+co = read.csv("~/downloads/cohort.csv")
+
+# create barplot
+barplot(cohort)
+```
+We can add different labels for the x and y axes or the main title.
+
+```r
+barplot(cohort, xlab = "Parent Income",
+        ylab = "Count", main = "Parental Income")
+```
+
 
 ## Creating a Dataframe
 Sometimes, it is required that we make our own dataset within R, which is called a dataframe. Here,
@@ -536,6 +599,7 @@ necessary to use the 3D scatterplot function.
 # install libraries as needed (remember, anything in quotes is case sensitive)
 install.packages("plot3D")
 install.packages("scatterplot3d")
+install.packages("rgl")
 
 # load libraries and dataset
 library(ggplot2)
@@ -625,6 +689,34 @@ scatterplot3d(cars[1:32,5:7],
             pch = 16, color = colors)
 ```
 
+We can also make the graph interactive, using the `rgl` package, which we already have loaded.
+
+First, we need to install the following software so that the computer can interpret the packages we import:
+
+https://www.xquartz.org/
+
+
+```r
+plot3d(cars[1:32,5:7])
+```
+
+Now we have a black and white graph, but we need to get back our `cyl` variable, which was communicated through color.
+
+```r
+colors = c("red", "blue", "green")
+colors <- as.numeric(cars$cyl)
+
+# create graph
+with(cars, plot3d(cars[1:32, 5:7],
+                  type = "s",
+                  col = as.integer(cars$cyl)))
+```
+
+The `with` function modifies data that already exists, so that is why we put the `plot3d` function within `with`
+
+`type = "s"` s is solid, and this represents the circles that are on the graph
+
+`col = as.integer(cars$cyl)))` This is setting the color equal to the integer we designated it to earlier.
 
 
 
