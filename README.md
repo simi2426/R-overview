@@ -105,7 +105,7 @@ library(ggplot2)
 college <- read.csv("~/downloads/collegedata.csv")
 
 # basic histogram
-ggplot(collegedata, aes(x = pmean)) + geom_histogram()
+ggplot(college, aes(x = pmean)) + geom_histogram()
 ```
 
 `ggplot()` initializes the GGplot2 function, and is where you input the dataset
@@ -120,7 +120,7 @@ change the line type, such as making it a dashed line.
 
 ``` r
 # change colors
-ggplot(one, aes(x = pmean)) + 
+ggplot(college, aes(x = pmean)) + 
   geom_histogram(color="chartreuse1", fill = "wheat", 
                  linetype = "dashed")
 
@@ -130,7 +130,7 @@ We want to add labels to our graph so viewers know what the axes mean, and
 we can do that using the `labs` function
 
 ``` r
-ggplot(one, aes(x = pmean)) + 
+ggplot(college, aes(x = pmean)) + 
   geom_histogram(color="chartreuse1", fill = "wheat", 
                  linetype = "dashed") +
   labs(title = "College Data",
@@ -244,6 +244,8 @@ data %>% ggplot(aes(x = "", y = carat)) +
 ```
 `geom_boxplot()` this adds a boxplot over the violin plot, which makes it easier to visualize quintiles, etc.
 
+'%>%' is part of the dplyr package, and is sort of the "parentheses" of R. It is very helpful to chain multiple functions together.
+
 We leave the x argument empty because we are only measuring one variable, which is the carat.
 We can measure multiple violin plots against each other as well.
 
@@ -339,9 +341,13 @@ plot2 <- data %>% ggplot(aes(x = wt, y = mpg, size = hp,
 plot2
 ```
 
-To make this graph even easier to read, we can add interactivity with the `plotly` package.
+To make this graph even easier to read, we can add interactivity with the `plotly` package. If you have not already, make sure you install the package first, but if you have, skip the step, or else R will put you in an endless cycle of restarting the program.
 
 ```r
+# install plotly if you have not already
+install.packages("plotly")
+# load plotly
+library(plotly)
 # convert into plotly
 g = ggplotly(plot2, width = 500, height=500) %>%
   layout(xaxis = list(range = c(1, 6)),
